@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.demo05.dao.MemberDAO">
+    <!--不指定active内容时，查询active=1的数据，配合删除使用-->
+    <select id="selectAll" resultType="MemberBean">
+        select * from gym_member
+        <where>
+            <if test="memberId != null and memberId !=''">
+                and member_id = #{memberId}
+            </if>
+            <if test="name != null and name != ''">
+                <bind name="nameLike" value="'%'+name+'%'"/>
+                and `name` like #{nameLike}
+            </if>
+            <if test="gender != null and gender != ''">
+                and gender = #{gender}
+            </if>
+            <if test="phone != null and phone != ''">
+                and phone like #{phone}
+            </if>
+            <if test="registerDateFrom != null and registerDateFrom != ''">
+                and register_date &gt;= #{registerDateFrom}
+            </if>
+            <if test="registerDateTo != null and registerDateTo != ''">
+                and register_date &lt;= #{registerDateTo}
+            </if>
+            <if test="expiredDateFrom != null and expiredDateFrom != ''">
+                and expired_date &gt;= #{expiredDateFrom}
+            </if>
+            <if test="expiredDateTo != null and expiredDateTo != ''">
+                and expired_date &lt;= #{expiredDateTo}
+            </if>
+            <if test="balanceFrom != null and balanceFrom != ''">
+                and balance &gt;= #{balanceFrom}
+            </if>
+            <if test="balanceTo != null and balanceTo != ''">
+                and balance &lt;= #{balanceTo}
+            </if>
+            <if test="active == null or active == ''">
+                and `active` = 1
+            </if>
+            <if test="active != null and active != ''">
+                and `active` = #{active}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into gym_member (member_id, name, gender, phone, register_date, expired_date, balance, active)
+        values (#{memberId}, #{name}, #{gender}, #{phone}, #{registerDate}, #{expiredDate}, #{balance}, #{active})
+    </insert>
+
+    <update id="updateByPrimaryKey">
+        update gym_member
+        set member_id     = #{memberId},
+            name          = #{name},
+            gender        = #{gender},
+            phone         = #{phone},
+            register_date = #{registerDate},
+            expired_date  = #{expiredDate},
+            balance       = #{balance},
+            active        = #{active}
+        where id = #{id}
+    </update>
+
+<!--    <delete id="deleteByPrimaryKey">-->
+<!--        delete from gym_member where id in-->
+<!--        <foreach collection="ids" open="(" close=")" separator="," item="id">-->
+<!--            #{id}-->
+<!--        </foreach>-->
+<!--    </delete>-->
+
+    <!--使用标志位替换删除功能-->
+    <delete id="deleteByPrimaryKey">
+        update gym_member set `active` = 0 where id in
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

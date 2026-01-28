@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: demo05
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3307/test_database_2?characterEncoding=utf-8&serverTimeZone=Asia/shanghai
+    username: root
+    password: 123456
+    type: com.zaxxer.hikari.HikariDataSource
+
+mybatis:
+  configuration:
+    #下划线转驼峰
+    map-underscore-to-camel-case: true
+    #指定日志前缀名称
+    log-prefix: mybatis-log.
+    #日志的实现类，指定日志的记录方式
+    #(打印至控制台)
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  #可以使用简称的包，包下的类使用简称
+  type-aliases-package: org.example.demo05.entity
+  #mapper文件位置
+  mapper-locations: classpath:/mapper/**/*.xml
