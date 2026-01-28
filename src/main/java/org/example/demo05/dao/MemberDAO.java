@@ -2,6 +2,7 @@ package org.example.demo05.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.example.demo05.entity.Member;
+import org.example.demo05.entity.bean.MemberBean;
 
 import java.util.List;
 
@@ -14,5 +15,5 @@ public interface MemberDAO {
     int updateByPrimaryKey(Member member);
 
     //    Member selectByPrimaryKey(Integer id);
-    List<Member> selectAll();
+    List<Member> selectAll(MemberBean memberBean);
 }

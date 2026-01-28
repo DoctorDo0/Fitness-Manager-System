@@ -1,8 +1,11 @@
 package org.example.demo05.service.implement;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import jakarta.annotation.Resource;
 import org.example.demo05.dao.MemberDAO;
 import org.example.demo05.entity.Member;
+import org.example.demo05.entity.bean.MemberBean;
 import org.example.demo05.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,8 +23,10 @@ public class MemberServiceImplement implements MemberService {
     }
 
     @Override
-    public List<Member> getMembers() {
-        return memberDAO.selectAll();
+    public List<Member> getMembers(Page<?> page, MemberBean memberBean) {
+        try (Page<?> _ = PageHelper.startPage(page.getPageNum(), page.getPageSize())) {
+            return memberDAO.selectAll(memberBean);
+        }
     }
 
     @Override
