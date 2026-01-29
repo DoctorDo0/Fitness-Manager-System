@@ -26,11 +26,17 @@
             <if test="registerDateTo != null and registerDateTo != ''">
                 and register_date &lt;= #{registerDateTo}
             </if>
-            <if test="expiredDateFrom != null and expiredDateFrom != ''">
-                and expired_date &gt;= #{expiredDateFrom}
+            <if test="registerBy != null and registerBy != ''">
+                and register_by = #{registerBy}
             </if>
-            <if test="expiredDateTo != null and expiredDateTo != ''">
-                and expired_date &lt;= #{expiredDateTo}
+            <if test="updateDateFrom != null and updateDateFrom != ''">
+                and update_date &gt;= #{updateDateFrom}
+            </if>
+            <if test="updateDateTo != null and updateDateTo != ''">
+                and update_date &lt;= #{updateDateTo}
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                and update_by = #{updateBy}
             </if>
             <if test="balanceFrom != null and balanceFrom != ''">
                 and balance &gt;= #{balanceFrom}
