@@ -2,7 +2,6 @@ package org.example.demo05.service.implement;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import jakarta.annotation.Resource;
 import org.example.demo05.dao.MemberDAO;
 import org.example.demo05.entity.Member;
 import org.example.demo05.entity.bean.MemberBean;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class MemberServiceImplement implements MemberService {
@@ -30,23 +28,13 @@ public class MemberServiceImplement implements MemberService {
     }
 
     @Override
-    public Map<Boolean, String> addMember(Member member) {
-        try {
-            memberDAO.insert(member);
-            return Map.of(true, "success");
-        } catch (Exception e) {
-            return Map.of(false, e.getMessage());
-        }
+    public Integer addMember(Member member) {
+        return memberDAO.insert(member);
     }
 
     @Override
-    public Map<Boolean, String> updateMember(Member member) {
-        try {
-            memberDAO.updateByPrimaryKey(member);
-            return Map.of(true, "success");
-        } catch (Exception e) {
-            return Map.of(false, e.getMessage());
-        }
+    public Integer updateMember(Member member) {
+        return memberDAO.updateByPrimaryKey(member);
     }
 
     @Override

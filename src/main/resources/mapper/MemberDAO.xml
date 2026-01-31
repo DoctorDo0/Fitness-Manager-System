@@ -8,7 +8,8 @@
         select * from gym_member
         <where>
             <if test="memberId != null and memberId !=''">
-                and member_id = #{memberId}
+                <bind name="memberIdLike" value="'%'+memberId+'%'"/>
+                and member_id like #{memberIdLike}
             </if>
             <if test="name != null and name != ''">
                 <bind name="nameLike" value="'%'+name+'%'"/>
@@ -18,21 +19,26 @@
                 and gender = #{gender}
             </if>
             <if test="phone != null and phone != ''">
-                and phone like #{phone}
+                 <bind name="phoneLike" value="'%'+phone+'%'"/>
+                and phone like #{phoneLike}
             </if>
-            <if test="registerDateFrom != null and registerDateFrom != ''">
+            <if test="email != null and email != ''">
+                <bind name="emailLike" value="'%'+email+'%'"/>
+                and email like #{emailLike}
+            </if>
+            <if test="registerDateFrom != null">
                 and register_date &gt;= #{registerDateFrom}
             </if>
-            <if test="registerDateTo != null and registerDateTo != ''">
+            <if test="registerDateTo != null">
                 and register_date &lt;= #{registerDateTo}
             </if>
             <if test="registerBy != null and registerBy != ''">
                 and register_by = #{registerBy}
             </if>
-            <if test="updateDateFrom != null and updateDateFrom != ''">
+            <if test="updateDateFrom != null">
                 and update_date &gt;= #{updateDateFrom}
             </if>
-            <if test="updateDateTo != null and updateDateTo != ''">
+            <if test="updateDateTo != null">
                 and update_date &lt;= #{updateDateTo}
             </if>
             <if test="updateBy != null and updateBy != ''">
