@@ -56,7 +56,7 @@ public class MemberController {
     }
 
     @DeleteMapping
-    public JsonResp deleteMember(Integer[] ids) {
+    public JsonResp deleteMember(@RequestBody Integer[] ids) {
         if (ids != null && ids.length == 0) {
             return JsonResp.error(400, "id为空");
         }
