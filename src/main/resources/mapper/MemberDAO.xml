@@ -18,13 +18,15 @@
             <if test="gender != null and gender != ''">
                 and gender = #{gender}
             </if>
-            <if test="phone != null and phone != ''">
-                 <bind name="phoneLike" value="'%'+phone+'%'"/>
-                and phone like #{phoneLike}
+            <if test="birthdayStart != null">
+                and birthday &gt;= #{birthdayStart}
             </if>
-            <if test="email != null and email != ''">
-                <bind name="emailLike" value="'%'+email+'%'"/>
-                and email like #{emailLike}
+            <if test="birthdayEnd != null">
+                and birthday &lt;= #{birthdayEnd}
+            </if>
+            <if test="phone != null and phone != ''">
+                <bind name="phoneLike" value="'%'+phone+'%'"/>
+                and phone like #{phoneLike}
             </if>
             <if test="registerDateFrom != null">
                 and register_date &gt;= #{registerDateFrom}
@@ -60,29 +62,39 @@
     </select>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-        insert into gym_member (member_id, name, gender, phone, register_date, expired_date, balance, active)
-        values (#{memberId}, #{name}, #{gender}, #{phone}, #{registerDate}, #{expiredDate}, #{balance}, #{active})
+        insert into gym_member (member_id, member_password, name, gender, birthday, phone, email, wechat, qq,
+                                description, /*register_date, register_by, expired_date, expired_by,*/ balance, active)
+        values (#{memberId}, #{memberPassword}, #{name}, #{gender}, #{birthday}, #{phone}, #{email}, #{wechat}, #{qq},
+                #{description}, /*#{registerDate}, #{registerBy}, #{expiredDate}, #{expiredBy},*/ #{balance}, #{active})
     </insert>
 
     <update id="updateByPrimaryKey">
         update gym_member
-        set member_id     = #{memberId},
-            name          = #{name},
-            gender        = #{gender},
-            phone         = #{phone},
-            register_date = #{registerDate},
-            expired_date  = #{expiredDate},
-            balance       = #{balance},
-            active        = #{active}
+        set member_id       = #{memberId},
+            member_password = #{memberPassword},
+            name            = #{name},
+            gender          = #{gender},
+            birthday        = #{birthday},
+            phone           = #{phone},
+            email           = #{email},
+            wechat          = #{wechat},
+            qq              = #{qq},
+            description     = #{description},
+            #    register_date   = #{registerDate},
+            #    register_by     = #{registerBy},
+            #    expired_date    = #{expiredDate},
+            #    expired_by      = #{expiredBy},
+            balance         = #{balance},
+            active          = #{active}
         where id = #{id}
     </update>
 
-<!--    <delete id="deleteByPrimaryKey">-->
-<!--        delete from gym_member where id in-->
-<!--        <foreach collection="ids" open="(" close=")" separator="," item="id">-->
-<!--            #{id}-->
-<!--        </foreach>-->
-<!--    </delete>-->
+    <!--    <delete id="deleteByPrimaryKey">-->
+    <!--        delete from gym_member where id in-->
+    <!--        <foreach collection="ids" open="(" close=")" separator="," item="id">-->
+    <!--            #{id}-->
+    <!--        </foreach>-->
+    <!--    </delete>-->
 
     <!--使用标志位替换删除功能-->
     <delete id="deleteByPrimaryKey">

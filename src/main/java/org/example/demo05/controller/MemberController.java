@@ -31,6 +31,10 @@ public class MemberController {
             PageInfo<?> pageInfo = new PageInfo<>(members);
             return JsonResp.success(pageInfo);
         } catch (Exception e) {
+//            System.out.println(e);
+//            System.out.println(e.toString());
+//            log.error("e: ", e);
+            System.out.println(e.getMessage());
             return JsonResp.error(500, e.toString());
         }
     }
@@ -41,6 +45,7 @@ public class MemberController {
             int resp = memberService.addMember(member);
             return JsonResp.success(resp);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return JsonResp.error(500, e.toString());
         }
     }
@@ -51,6 +56,7 @@ public class MemberController {
             int resp = memberService.updateMember(member);
             return JsonResp.success(resp);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return JsonResp.error(500, e.toString());
         }
     }
@@ -64,6 +70,7 @@ public class MemberController {
             int res = memberService.deleteMember(ids);
             return JsonResp.success(res);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return JsonResp.error(500, e.toString());
         }
     }

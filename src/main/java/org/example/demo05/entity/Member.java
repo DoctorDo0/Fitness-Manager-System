@@ -12,11 +12,16 @@ import java.time.LocalDate;
 @ToString
 public class Member extends AuditEntity {
     private int id;
-    private int memberId;
+    private String memberId;
+    private String memberPassword;
     private String name;
     private String gender;
+    private LocalDate birthday;
     private String phone;
     private String email;
+    private String wechat;
+    private String qq;
+    private String description;
     private double balance;
     private boolean active;
 }

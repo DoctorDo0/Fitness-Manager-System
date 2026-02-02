@@ -12,6 +12,9 @@ import java.time.format.DateTimeFormatter;
 @Setter
 @ToString
 public class MemberBean extends Member {
+    private String[] birthdayRange;
+    private LocalDate birthdayStart;
+    private LocalDate birthdayEnd;
     private String[] registerDateRange;
     private LocalDate registerDateFrom;
     private LocalDate registerDateTo;
@@ -20,6 +23,16 @@ public class MemberBean extends Member {
     private LocalDate updateDateTo;
     private double balanceFrom;
     private double balanceTo;
+
+    public void setBirthdayRange(String[] birthdayRange) {
+        this.birthdayRange = birthdayRange;
+        if (birthdayRange.length == 2) {
+            String start = birthdayRange[0].trim();
+            String end = birthdayRange[1].trim();
+            birthdayStart = LocalDate.parse(start, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            birthdayEnd = LocalDate.parse(end, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }
+    }
 
     public void setRegisterDateRange(String[] registerDateRange) {
         this.registerDateRange = registerDateRange;
