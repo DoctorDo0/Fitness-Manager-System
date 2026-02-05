@@ -6,14 +6,18 @@ import org.example.demo05.dao.MemberDAO;
 import org.example.demo05.entity.Member;
 import org.example.demo05.entity.bean.MemberBean;
 import org.example.demo05.service.MemberService;
+import org.jasypt.util.password.PasswordEncryptor;
+import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
 @Service
 public class MemberServiceImplement implements MemberService {
-    MemberDAO memberDAO;
+    private static final PasswordEncryptor pe = new StrongPasswordEncryptor();
+    private MemberDAO memberDAO;
 
     @Autowired
     public void setMemberMapper(MemberDAO memberDAO) {
@@ -34,6 +38,11 @@ public class MemberServiceImplement implements MemberService {
 
     @Override
     public Integer updateMember(Member member) {
+        if (!StringUtils.hasText(member.getMemberPassword())) {
+            member.setMemberPassword(null);
+        } else {
+            member.setMemberPassword(pe.encryptPassword(member.getMemberPassword()));
+        }
         return memberDAO.updateByPrimaryKey(member);
     }
 

@@ -5,7 +5,9 @@
 <mapper namespace="org.example.demo05.dao.MemberDAO">
     <!--不指定active内容时，查询active=1的数据，配合删除使用-->
     <select id="selectAll" resultType="MemberBean">
-        select * from gym_member
+        select
+        id,member_id,name,gender,birthday,phone,email,wechat,qq,register_date,register_by,update_date,update_by,description,balance
+        from gym_member
         <where>
             <if test="memberId != null and memberId !=''">
                 <bind name="memberIdLike" value="'%'+memberId+'%'"/>
@@ -63,29 +65,25 @@
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         insert into gym_member (member_id, member_password, name, gender, birthday, phone, email, wechat, qq,
-                                description, /*register_date, register_by, expired_date, expired_by,*/ balance, active)
+                                description, balance, active)
         values (#{memberId}, #{memberPassword}, #{name}, #{gender}, #{birthday}, #{phone}, #{email}, #{wechat}, #{qq},
-                #{description}, /*#{registerDate}, #{registerBy}, #{expiredDate}, #{expiredBy},*/ #{balance}, #{active})
+                #{description}, #{balance}, 1)
     </insert>
 
     <update id="updateByPrimaryKey">
         update gym_member
-        set member_id       = #{memberId},
+        set member_id = #{memberId},
+        <if test="memberPassword!=null and memberPassword!=''">
             member_password = #{memberPassword},
-            name            = #{name},
-            gender          = #{gender},
-            birthday        = #{birthday},
-            phone           = #{phone},
-            email           = #{email},
-            wechat          = #{wechat},
-            qq              = #{qq},
-            description     = #{description},
-            #    register_date   = #{registerDate},
-            #    register_by     = #{registerBy},
-            #    expired_date    = #{expiredDate},
-            #    expired_by      = #{expiredBy},
-            balance         = #{balance},
-            active          = #{active}
+        </if>
+        name = #{name},
+        gender = #{gender},
+        birthday = #{birthday},
+        phone = #{phone},
+        email = #{email},
+        wechat = #{wechat},
+        qq = #{qq},
+        description = #{description}
         where id = #{id}
     </update>
 

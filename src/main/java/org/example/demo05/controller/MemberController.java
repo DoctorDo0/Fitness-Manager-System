@@ -25,6 +25,7 @@ public class MemberController {
 
     @GetMapping
     public JsonResp getMembers(int pageNo, int pageSize, MemberBean memberBean) {
+        //TODO:校验
         try {
             Page<?> page = new Page<>(pageNo, pageSize);
             List<Member> members = memberService.getMembers(page, memberBean);
@@ -41,6 +42,7 @@ public class MemberController {
 
     @PostMapping
     public JsonResp addMember(@RequestBody Member member) {
+        //TODO:校验
         try {
             int resp = memberService.addMember(member);
             return JsonResp.success(resp);
@@ -52,6 +54,7 @@ public class MemberController {
 
     @PutMapping
     public JsonResp updateMember(@RequestBody Member member) {
+        //TODO:校验
         try {
             int resp = memberService.updateMember(member);
             return JsonResp.success(resp);
@@ -63,6 +66,7 @@ public class MemberController {
 
     @DeleteMapping
     public JsonResp deleteMember(@RequestBody Integer[] ids) {
+        //TODO:校验
         if (ids != null && ids.length == 0) {
             return JsonResp.error(400, "id为空");
         }
