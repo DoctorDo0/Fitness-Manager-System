@@ -9,7 +9,20 @@ spring:
     password: 123456
     type: com.zaxxer.hikari.HikariDataSource
 
-mybatis:
+  #redis配置
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: 123456
+      database: 0
+      #读写redis的超时时间
+      timeout: 3s
+      #连接redis的超时时间
+      connect-timeout: 3s
+
+#mybatis-plus
+mybatis-plus:
   configuration:
     #下划线转驼峰
     map-underscore-to-camel-case: true
@@ -21,4 +34,4 @@ mybatis:
   #可以使用简称的包，包下的类使用简称
   type-aliases-package: org.example.demo05.entity
   #mapper文件位置
-  mapper-locations: classpath:/mapper/**/*.xml
+  mapper-locations: classpath*:/mapper/**/*.xml

@@ -9,6 +9,9 @@
         id,member_id,name,gender,birthday,phone,email,wechat,qq,register_date,register_by,update_date,update_by,description,balance
         from gym_member
         <where>
+            <if test="id != null and id !=''">
+                and id = #{id}
+            </if>
             <if test="memberId != null and memberId !=''">
                 <bind name="memberIdLike" value="'%'+memberId+'%'"/>
                 and member_id like #{memberIdLike}

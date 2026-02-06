@@ -37,10 +37,15 @@ public class JsonResp {
         return resp;
     }
 
-    public static JsonResp error(int code, String message) {
+    public static JsonResp error(String message) {
         JsonResp resp = JsonResp.error();
-        resp.code = code;
         resp.message = message;
+        return resp;
+    }
+
+    public static JsonResp error(int code, String message) {
+        JsonResp resp = JsonResp.error(message);
+        resp.code = code;
         return resp;
     }
 }
