@@ -101,7 +101,8 @@
 
     <!--使用标志位替换删除功能-->
     <delete id="deleteByPrimaryKey">
-        update gym_member set `active` = 0 where id in
+        update gym_member set `active` = 0,update_date = #{auditEntity.updateDate},update_by=#{auditEntity.updateBy}
+        where id in
         <foreach collection="ids" open="(" close=")" separator="," item="id">
             #{id}
         </foreach>

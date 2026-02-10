@@ -1,6 +1,7 @@
 package org.example.demo05.dao;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.example.demo05.entity.Member;
 import org.example.demo05.entity.bean.MemberBean;
 import org.example.demo05.utils.AuditEntity;
@@ -11,7 +12,7 @@ import java.util.List;
 public interface MemberDAO {
     int insert(Member member);
 
-    int deleteByPrimaryKey(Integer[] ids);
+    int deleteByPrimaryKey(@Param("auditEntity") AuditEntity auditEntity, @Param("ids") Integer[] ids);
 
     int updateByPrimaryKey(Member member);
 

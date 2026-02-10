@@ -21,6 +21,15 @@ spring:
       #连接redis的超时时间
       connect-timeout: 3s
 
+  #配置spring缓存
+  cache:
+    type: redis
+    redis:
+      use-key-prefix: false
+      key-prefix: st-
+      #默认存活时间
+      time-to-live: 4h
+
 #mybatis-plus
 mybatis-plus:
   configuration:

@@ -154,6 +154,21 @@
             <scope>compile</scope>
         </dependency>
 
+        <!--mybatis-plus的分页插件-->
+        <!-- Source: https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-jsqlparser -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-jsqlparser</artifactId>
+            <version>3.5.16</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!--spring缓存依赖，以及redis依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

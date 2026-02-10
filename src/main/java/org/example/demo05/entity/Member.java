@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @ToString
-public class Member extends AuditEntity {
+public class Member extends AuditEntity /*implements Serializable*/ {
 
     private int id;
 

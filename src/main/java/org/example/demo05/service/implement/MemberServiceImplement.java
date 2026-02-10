@@ -50,6 +50,6 @@ public class MemberServiceImplement implements MemberService {
 
     @Override
     public Integer deleteMember(AuditEntity auditEntity, Integer[] ids) {
-        return memberDAO.deleteByPrimaryKey(ids);
+        return memberDAO.deleteByPrimaryKey(auditEntity, ids);
     }
 }
