@@ -68,9 +68,9 @@
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         insert into gym_member (member_id, member_password, name, gender, birthday, phone, email, wechat, qq,
-                                description, balance, active)
+                                register_date, register_by, update_date, update_by, description, balance, active)
         values (#{memberId}, #{memberPassword}, #{name}, #{gender}, #{birthday}, #{phone}, #{email}, #{wechat}, #{qq},
-                #{description}, #{balance}, 1)
+                #{registerDate}, #{registerBy}, #{updateDate}, #{updateBy}, #{description}, 0, 1)
     </insert>
 
     <update id="updateByPrimaryKey">
@@ -86,6 +86,8 @@
         email = #{email},
         wechat = #{wechat},
         qq = #{qq},
+        update_date = #{updateDate},
+        update_by = #{updateBy},
         description = #{description}
         where id = #{id}
     </update>

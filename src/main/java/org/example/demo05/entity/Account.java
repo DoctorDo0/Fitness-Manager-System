@@ -1,6 +1,5 @@
 package org.example.demo05.entity;
 
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -10,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class Account {
     @NotBlank(message = "用户名不可为空")
-    @Size(min = 6, max = 12, message = "用户名长度必须介于6~12位")
+    @Size(min = 4, max = 12, message = "用户名长度必须介于4~12位")
     private String username;
     @NotBlank(message = "密码不可为空")
     private String password;

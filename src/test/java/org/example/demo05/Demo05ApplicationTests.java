@@ -4,6 +4,8 @@ import com.github.pagehelper.Page;
 import org.example.demo05.entity.Member;
 import org.example.demo05.entity.bean.MemberBean;
 import org.example.demo05.service.MemberService;
+import org.jasypt.util.password.PasswordEncryptor;
+import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -113,6 +115,16 @@ class Demo05ApplicationTests {
             IO.println(obj);
         }
 
+    }
+
+    @Test
+    @DisplayName("生成密钥")
+    public void test1() {
+//        String str = "15963294666";
+//        String str = "ciphertext";
+        String str = "123456";
+        PasswordEncryptor pe = new StrongPasswordEncryptor();
+        IO.println(pe.encryptPassword(str));
     }
 
 }

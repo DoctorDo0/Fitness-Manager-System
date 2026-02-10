@@ -6,6 +6,7 @@ import org.example.demo05.dao.MemberDAO;
 import org.example.demo05.entity.Member;
 import org.example.demo05.entity.bean.MemberBean;
 import org.example.demo05.service.MemberService;
+import org.example.demo05.utils.AuditEntity;
 import org.jasypt.util.password.PasswordEncryptor;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Service
 public class MemberServiceImplement implements MemberService {
+    //强加密器
     private static final PasswordEncryptor pe = new StrongPasswordEncryptor();
     private MemberDAO memberDAO;
 
@@ -47,7 +49,7 @@ public class MemberServiceImplement implements MemberService {
     }
 
     @Override
-    public Integer deleteMember(Integer[] ids) {
+    public Integer deleteMember(AuditEntity auditEntity, Integer[] ids) {
         return memberDAO.deleteByPrimaryKey(ids);
     }
 }

@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import org.example.demo05.entity.Member;
 import org.example.demo05.entity.bean.MemberBean;
 import org.example.demo05.service.implement.MemberServiceImplement;
+import org.example.demo05.utils.AuditEntity;
 import org.example.demo05.utils.JsonResp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -64,7 +65,8 @@ public class MemberController {
             return JsonResp.error(400, "id为空");
         }
         try {
-            int res = memberService.deleteMember(ids);
+            AuditEntity auditEntity = new AuditEntity();
+            int res = memberService.deleteMember(auditEntity, ids);
             return JsonResp.success(res);
         } catch (Exception e) {
 //            return JsonResp.error(500, e.toString());

@@ -35,3 +35,9 @@ mybatis-plus:
   type-aliases-package: org.example.demo05.entity
   #mapper文件位置
   mapper-locations: classpath*:/mapper/**/*.xml
+
+#用于jwt哈希的密钥
+jwt:
+  #plaintext: ciphertext
+  #ciphertext: UsMY6GA7swW1yGsWiy2uFS7CwdtvBNSJPNMCiRs6Xw9qztogBb141tX8hET3L/Ng
+  secret: UsMY6GA7swW1yGsWiy2uFS7CwdtvBNSJPNMCiRs6Xw9qztogBb141tX8hET3L/Ng
