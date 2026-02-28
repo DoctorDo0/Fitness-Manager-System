@@ -10,6 +10,8 @@ import java.util.List;
 public interface MemberService {
     List<Member> getMembers(Page<?> page, MemberBean memberBean);
 
+    Integer getMembersCount(MemberBean memberBean);
+
     Integer addMember(Member member);
 
     Integer updateMember(Member member);

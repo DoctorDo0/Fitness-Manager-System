@@ -34,6 +34,11 @@ public class MemberServiceImplement implements MemberService {
     }
 
     @Override
+    public Integer getMembersCount(MemberBean memberBean) {
+        return memberDAO.getMembersCount(memberBean);
+    }
+
+    @Override
     public Integer addMember(Member member) {
         return memberDAO.insert(member);
     }

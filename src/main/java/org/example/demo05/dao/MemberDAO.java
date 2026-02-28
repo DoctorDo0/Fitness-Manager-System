@@ -20,4 +20,6 @@ public interface MemberDAO {
 
     //    Member selectByPrimaryKey(Integer id);
     List<Member> selectAll(MemberBean memberBean);
+
+    int getMembersCount(MemberBean memberBean);
 }

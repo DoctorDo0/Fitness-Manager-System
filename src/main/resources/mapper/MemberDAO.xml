@@ -60,6 +60,60 @@
         </where>
     </select>
 
+    <select id="getMembersCount" resultType="int">
+        select count(0) from gym_member
+        <where>
+            <if test="id != null and id !=''">
+                and id = #{id}
+            </if>
+            <if test="memberId != null and memberId !=''">
+                <bind name="memberIdLike" value="'%'+memberId+'%'"/>
+                and member_id like #{memberIdLike}
+            </if>
+            <if test="name != null and name != ''">
+                <bind name="nameLike" value="'%'+name+'%'"/>
+                and `name` like #{nameLike}
+            </if>
+            <if test="gender != null and gender != ''">
+                and gender = #{gender}
+            </if>
+            <if test="birthdayStart != null">
+                and birthday &gt;= #{birthdayStart}
+            </if>
+            <if test="birthdayEnd != null">
+                and birthday &lt;= #{birthdayEnd}
+            </if>
+            <if test="phone != null and phone != ''">
+                <bind name="phoneLike" value="'%'+phone+'%'"/>
+                and phone like #{phoneLike}
+            </if>
+            <if test="registerDateFrom != null">
+                and register_date &gt;= #{registerDateFrom}
+            </if>
+            <if test="registerDateTo != null">
+                and register_date &lt;= #{registerDateTo}
+            </if>
+            <if test="registerBy != null and registerBy != ''">
+                and register_by = #{registerBy}
+            </if>
+            <if test="updateDateFrom != null">
+                and update_date &gt;= #{updateDateFrom}
+            </if>
+            <if test="updateDateTo != null">
+                and update_date &lt;= #{updateDateTo}
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                and update_by = #{updateBy}
+            </if>
+            <if test="active == null">
+                and `active` = 1
+            </if>
+            <if test="active != null">
+                and `active` = #{active}
+            </if>
+        </where>
+    </select>
+
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         insert into gym_member (member_id, member_password, name, gender, birthday, phone, email, wechat, qq,
                                 register_date, register_by, update_date, update_by, description, balance, active)

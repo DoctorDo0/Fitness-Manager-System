@@ -106,9 +106,12 @@ public class MemberController {
      */
     @GetMapping(value = "/export", produces = "application/vnd.ms-excel")
     public void exportToExcel(MemberBean memberBean, HttpServletResponse resp) throws IOException {
+        // mybatisplus的组件page设置pageSize为-1时可获取所有项，pageHelper不包含此功能
 //        com.baomidou.mybatisplus.extension.plugins.pagination.Page<Member> p = new com.baomidou.mybatisplus.extension.plugins.pagination.Page<>(1, -1);
-        //TODO:此处pageSize需要count(0)，或手动重写getAll
-        Page<Member> p = new Page<>(1, 10);
+
+        // 获取最大数量
+        int count = this.memberService.getMembersCount(memberBean);
+        Page<Member> p = new Page<>(1, count);
 //        //满足条件的会员
 //        p = memberService.getMembers(p, memberBean);
 //        //会员列表
