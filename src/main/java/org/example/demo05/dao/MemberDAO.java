@@ -14,6 +14,8 @@ public interface MemberDAO {
 
     int deleteByPrimaryKey(@Param("ids") Integer[] ids, @Param("auditEntity") AuditEntity auditEntity);
 
+    int restoreByPrimaryKey(@Param("ids") Integer[] ids, @Param("auditEntity") AuditEntity auditEntity);
+
     int updateByPrimaryKey(Member member);
 
     //    Member selectByPrimaryKey(Integer id);

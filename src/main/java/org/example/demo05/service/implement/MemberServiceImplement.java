@@ -54,6 +54,11 @@ public class MemberServiceImplement implements MemberService {
     }
 
     @Override
+    public Integer restoreMember(Integer[] ids, AuditEntity auditEntity) {
+        return memberDAO.restoreByPrimaryKey(ids, auditEntity);
+    }
+
+    @Override
     public int batchSave(List<Member> members) {
         int count = 0;
         for (Member member : members) {

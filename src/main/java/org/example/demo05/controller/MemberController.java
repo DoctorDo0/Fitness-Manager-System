@@ -87,6 +87,20 @@ public class MemberController {
         }
     }
 
+    @PatchMapping
+    public JsonResp patchMember(@RequestBody Integer[] ids) {
+        if (ids != null && ids.length == 0) {
+            return JsonResp.error(400, "id为空");
+        }
+        try {
+            int res = memberService.restoreMember(ids, new AuditEntity());
+            return JsonResp.success(res);
+        } catch (Exception e) {
+//            return JsonResp.error(500, e.toString());
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * 导出会员到excel
      */
