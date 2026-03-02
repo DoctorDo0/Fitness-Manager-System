@@ -3,6 +3,7 @@ package org.example.demo05.entity;
 import cn.idev.excel.annotation.ExcelIgnore;
 import cn.idev.excel.annotation.ExcelProperty;
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import jakarta.validation.constraints.*;
@@ -33,6 +34,10 @@ public class Member extends AuditEntity /*implements Serializable*/ {
     @NotBlank(message = "密码不可为空", groups = MemberAdd.class)
     @Size(min = 6, max = 12, message = "密码长度必须介于6~12之间", groups = {MemberEdit.class, MemberAdd.class})
     private String memberPassword;
+
+    @ExcelIgnore
+    @TableField("portrait")
+    private String avatar;
 
     @ExcelProperty("姓名")
     @NotBlank(message = "会员姓名不可为空", groups = {MemberEdit.class, MemberAdd.class})

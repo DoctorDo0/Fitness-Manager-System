@@ -19,7 +19,7 @@ public class JwtConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor)
-                .addPathPatterns("/**")
+                .addPathPatterns("/api/**")
                 //不进行拦截的地址
                 .excludePathPatterns("/api/users/login",
                         "/api/users/captcha",

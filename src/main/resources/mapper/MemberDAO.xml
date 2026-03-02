@@ -3,10 +3,17 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.example.demo05.dao.MemberDAO">
+    <!--自定义结果集映射-->
+    <resultMap id="BaseResultMap" type="org.example.demo05.entity.Member">
+        <!--<id column="id" property="id"/>
+        <result column="member_id" property="memberId"/>
+        <result column="member_password" property="memberPassword"/>-->
+        <result column="portrait" property="avatar"/>
+    </resultMap>
     <!--不指定active内容时，查询active=1的数据，配合删除使用-->
-    <select id="selectAll" resultType="MemberBean">
+    <select id="selectAll" resultType="MemberBean" resultMap="BaseResultMap">
         select
-        id,member_id,name,gender,birthday,phone,email,wechat,qq,register_date,register_by,update_date,update_by,description,balance,active
+        id,member_id,portrait,name,gender,birthday,phone,email,wechat,qq,register_date,register_by,update_date,update_by,description,balance,active
         from gym_member
         <where>
             <if test="id != null and id !=''">
@@ -115,9 +122,9 @@
     </select>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-        insert into gym_member (member_id, member_password, name, gender, birthday, phone, email, wechat, qq,
+        insert into gym_member (member_id, member_password, portrait, name, gender, birthday, phone, email, wechat, qq,
                                 register_date, register_by, update_date, update_by, description, balance, active)
-        values (#{memberId}, #{memberPassword}, #{name}, #{gender}, #{birthday}, #{phone}, #{email}, #{wechat}, #{qq},
+        values (#{memberId}, #{memberPassword}, #{avatar}, #{name}, #{gender}, #{birthday}, #{phone}, #{email},#{wechat}, #{qq},
                 #{registerDate}, #{registerBy}, #{updateDate}, #{updateBy}, #{description}, 0, 1)
     </insert>
 
@@ -127,6 +134,7 @@
         <if test="memberPassword!=null and memberPassword!=''">
             member_password = #{memberPassword},
         </if>
+        portrait = #{avatar},
         name = #{name},
         gender = #{gender},
         birthday = #{birthday},

@@ -2,6 +2,9 @@ spring:
   application:
     name: demo05
 
+  main:
+    banner-mode: console
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3307/test_database_2?characterEncoding=utf-8&serverTimeZone=Asia/shanghai
@@ -50,3 +53,11 @@ jwt:
   #plaintext: ciphertext
   #ciphertext: UsMY6GA7swW1yGsWiy2uFS7CwdtvBNSJPNMCiRs6Xw9qztogBb141tX8hET3L/Ng
   secret: UsMY6GA7swW1yGsWiy2uFS7CwdtvBNSJPNMCiRs6Xw9qztogBb141tX8hET3L/Ng
+
+#自定义配置
+upload:
+  #文件上传的存储位置
+  #location: .src/main/resources/upload/
+  location: d:/upload/
+  #请求路径
+  url: http://localhost:8080/upload/

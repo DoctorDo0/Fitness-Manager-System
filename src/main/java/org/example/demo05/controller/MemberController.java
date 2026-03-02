@@ -9,7 +9,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.example.demo05.entity.Member;
 import org.example.demo05.entity.bean.MemberBean;
 import org.example.demo05.service.MemberService;
+import org.example.demo05.service.UploadService;
 import org.example.demo05.service.implement.MemberServiceImplement;
+import org.example.demo05.service.implement.UploadServiceImpl;
 import org.example.demo05.utils.AuditEntity;
 import org.example.demo05.utils.JsonResp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +34,16 @@ import java.util.List;
 @RequestMapping(value = "/api/member", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MemberController {
     MemberServiceImplement memberService;
+    UploadService uploadService;
 
     @Autowired
     public void setMemberService(MemberServiceImplement memberService) {
         this.memberService = memberService;
+    }
+
+    @Autowired
+    public void setUploadService(UploadServiceImpl uploadService) {
+        this.uploadService = uploadService;
     }
 
     @GetMapping
@@ -185,5 +193,12 @@ public class MemberController {
         public int count() {
             return members.size();
         }
+    }
+
+    //头像上传
+    @PostMapping("/avatar")
+    public JsonResp uploadAvatar(MultipartFile file) {
+        String url = this.uploadService.upload(file, "member_avatar");
+        return JsonResp.success(url);
     }
 }
