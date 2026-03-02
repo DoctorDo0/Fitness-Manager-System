@@ -9,12 +9,13 @@ import lombok.Setter;
 import java.io.Serializable;
 
 //科目，课程类别
-@TableName("t_subject")
+@TableName("cms_course")
 @Getter
 @Setter
-public class Subject implements Serializable {
+public class Course implements Serializable {
     @TableId(type = IdType.AUTO)
     private Integer id;
-    private String name;
+    private String courseId;
+    private String courseName;
     private String description;
 }

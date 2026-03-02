@@ -2,24 +2,24 @@ package org.example.demo05.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.example.demo05.entity.Member;
-import org.example.demo05.entity.bean.MemberBean;
+import org.example.demo05.entity.Teacher;
+import org.example.demo05.entity.bean.TeacherBean;
 import org.example.demo05.utils.AuditEntity;
 
 import java.util.List;
 
 @Mapper
-public interface MemberDAO {
-    int insert(Member member);
+public interface TeacherDAO {
+    int insert(Teacher teacher);
 
     int deleteByPrimaryKey(@Param("ids") Integer[] ids, @Param("auditEntity") AuditEntity auditEntity);
 
     int restoreByPrimaryKey(@Param("ids") Integer[] ids, @Param("auditEntity") AuditEntity auditEntity);
 
-    int updateByPrimaryKey(Member member);
+    int updateByPrimaryKey(Teacher teacher);
 
-    //    Member selectByPrimaryKey(Integer id);
-    List<Member> selectAll(MemberBean memberBean);
+    //    Teacher selectByPrimaryKey(Integer id);
+    List<Teacher> selectAll(TeacherBean teacherBean);
 
-    int getMembersCount(MemberBean memberBean);
+    int getTeachersCount(TeacherBean teacherBean);
 }

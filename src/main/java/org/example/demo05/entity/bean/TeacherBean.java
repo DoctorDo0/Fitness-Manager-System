@@ -3,7 +3,7 @@ package org.example.demo05.entity.bean;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.example.demo05.entity.Member;
+import org.example.demo05.entity.Teacher;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -11,10 +11,11 @@ import java.time.format.DateTimeFormatter;
 @Getter
 @Setter
 @ToString
-public class MemberBean extends Member {
+public class TeacherBean extends Teacher {
     private String[] birthdayRange;
     private LocalDate birthdayStart;
     private LocalDate birthdayEnd;
+
     private String[] registerDateRange;
     private LocalDate registerDateFrom;
     private LocalDate registerDateTo;

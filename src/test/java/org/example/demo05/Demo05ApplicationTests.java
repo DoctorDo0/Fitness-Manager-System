@@ -1,10 +1,10 @@
 package org.example.demo05;
 
 import com.github.pagehelper.Page;
-import org.example.demo05.entity.Member;
+import org.example.demo05.entity.Student;
 import org.example.demo05.entity.User;
-import org.example.demo05.entity.bean.MemberBean;
-import org.example.demo05.service.MemberService;
+import org.example.demo05.entity.bean.StudentBean;
+import org.example.demo05.service.StudentService;
 import org.jasypt.util.password.PasswordEncryptor;
 import org.jasypt.util.password.StrongPasswordEncryptor;
 import org.junit.jupiter.api.Assertions;
@@ -21,7 +21,7 @@ import java.util.Set;
 @SpringBootTest
 class Demo05ApplicationTests {
     @Autowired
-    private MemberService memberService;
+    private StudentService studentService;
     @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
 
@@ -29,36 +29,36 @@ class Demo05ApplicationTests {
     void contextLoads() {
     }
 
-    //单元测试，测试MemberServiceImpl的findAll方法
+    //单元测试，测试StudentServiceImpl的findAll方法
     @Test
-    @DisplayName("对MemberServiceImpl测试list方法")
-    public void testMemberServiceList() {
+    @DisplayName("对StudentServiceImpl测试list方法")
+    public void testStudentServiceList() {
         Page<?> p = new Page<>(1, 10);
-        MemberBean memberBean = new MemberBean();
-        memberBean.setId(22);
-        List<Member> members = memberService.getMembers(p, memberBean);
+        StudentBean studentBean = new StudentBean();
+        studentBean.setId(22);
+        List<Student> students = studentService.getStudents(p, studentBean);
 
         //断言
-        Assertions.assertEquals(1, members.size());
+        Assertions.assertEquals(1, students.size());
     }
 
     @Test
     @DisplayName("测试Redis的string类型")
     public void testRedis01() {
-        Member member = new Member();
-        member.setId(1);
-        member.setName("孙小美");
-        member.setPhone("11111");
+        Student student = new Student();
+        student.setId(1);
+        student.setName("孙小美");
+        student.setPhone("11111");
         //存
-        redisTemplate.opsForValue().set("member", member);
+        redisTemplate.opsForValue().set("student", student);
         //取
-        Member member1 = (Member) redisTemplate.opsForValue().get("member");
-        IO.println(member1);
+        Student student1 = (Student) redisTemplate.opsForValue().get("student");
+        IO.println(student1);
 
         //redisTemplate.opsForValue().set("count", Integer.valueOf(100));
         //redisTemplate.opsForValue().increment("count");
 
-        redisTemplate.delete("member");
+        redisTemplate.delete("student");
     }
 
     @Test

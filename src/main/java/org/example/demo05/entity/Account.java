@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+// 后台登录信息，用于前端登录验证的容器
 @Getter
 @Setter
 public class Account {

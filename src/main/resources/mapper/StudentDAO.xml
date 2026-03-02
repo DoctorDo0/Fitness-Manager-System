@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.demo05.dao.StudentDAO">
+    <!--自定义结果集映射-->
+    <resultMap id="BaseResultMap" type="org.example.demo05.entity.Student">
+        <!--<id column="id" property="id"/>
+        <result column="student_id" property="studentId"/>
+        <result column="student_password" property="studentPassword"/>-->
+        <result column="portrait" property="avatar"/>
+    </resultMap>
+    <!--不指定active内容时，查询active=1的数据，配合删除使用-->
+    <select id="selectAll" resultType="StudentBean" resultMap="BaseResultMap">
+        select
+        id,student_id,portrait,name,gender,birthday,phone,email,wechat,qq,register_date,register_by,update_date,update_by,description,active
+        from cms_student
+        <where>
+            <if test="id != null and id !=''">
+                and id = #{id}
+            </if>
+            <if test="studentId != null and studentId !=''">
+                <bind name="studentIdLike" value="'%'+studentId+'%'"/>
+                and student_id like #{studentIdLike}
+            </if>
+            <if test="name != null and name != ''">
+                <bind name="nameLike" value="'%'+name+'%'"/>
+                and `name` like #{nameLike}
+            </if>
+            <if test="gender != null and gender != ''">
+                and gender = #{gender}
+            </if>
+            <if test="birthdayStart != null">
+                and birthday &gt;= #{birthdayStart}
+            </if>
+            <if test="birthdayEnd != null">
+                and birthday &lt;= #{birthdayEnd}
+            </if>
+            <if test="phone != null and phone != ''">
+                <bind name="phoneLike" value="'%'+phone+'%'"/>
+                and phone like #{phoneLike}
+            </if>
+            <if test="registerDateFrom != null">
+                and register_date &gt;= #{registerDateFrom}
+            </if>
+            <if test="registerDateTo != null">
+                and register_date &lt;= #{registerDateTo}
+            </if>
+            <if test="registerBy != null and registerBy != ''">
+                and register_by = #{registerBy}
+            </if>
+            <if test="updateDateFrom != null">
+                and update_date &gt;= #{updateDateFrom}
+            </if>
+            <if test="updateDateTo != null">
+                and update_date &lt;= #{updateDateTo}
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                and update_by = #{updateBy}
+            </if>
+            <if test="active == null">
+                and `active` = 1
+            </if>
+            <if test="active != null">
+                and `active` = #{active}
+            </if>
+        </where>
+    </select>
+
+    <select id="getStudentsCount" resultType="int">
+        select count(0) from cms_student
+        <where>
+            <if test="id != null and id !=''">
+                and id = #{id}
+            </if>
+            <if test="studentId != null and studentId !=''">
+                <bind name="studentIdLike" value="'%'+studentId+'%'"/>
+                and student_id like #{studentIdLike}
+            </if>
+            <if test="name != null and name != ''">
+                <bind name="nameLike" value="'%'+name+'%'"/>
+                and `name` like #{nameLike}
+            </if>
+            <if test="gender != null and gender != ''">
+                and gender = #{gender}
+            </if>
+            <if test="birthdayStart != null">
+                and birthday &gt;= #{birthdayStart}
+            </if>
+            <if test="birthdayEnd != null">
+                and birthday &lt;= #{birthdayEnd}
+            </if>
+            <if test="phone != null and phone != ''">
+                <bind name="phoneLike" value="'%'+phone+'%'"/>
+                and phone like #{phoneLike}
+            </if>
+            <if test="registerDateFrom != null">
+                and register_date &gt;= #{registerDateFrom}
+            </if>
+            <if test="registerDateTo != null">
+                and register_date &lt;= #{registerDateTo}
+            </if>
+            <if test="registerBy != null and registerBy != ''">
+                and register_by = #{registerBy}
+            </if>
+            <if test="updateDateFrom != null">
+                and update_date &gt;= #{updateDateFrom}
+            </if>
+            <if test="updateDateTo != null">
+                and update_date &lt;= #{updateDateTo}
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                and update_by = #{updateBy}
+            </if>
+            <if test="active == null">
+                and `active` = 1
+            </if>
+            <if test="active != null">
+                and `active` = #{active}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into cms_student (student_id, student_password, portrait, name, gender, birthday, phone, email,
+                                 wechat, qq,
+                                 register_date, register_by, update_date, update_by, description, active)
+        values (#{studentId}, #{studentPassword}, #{avatar}, #{name}, #{gender}, #{birthday}, #{phone}, #{email},
+                #{wechat}, #{qq},
+                #{registerDate}, #{registerBy}, #{updateDate}, #{updateBy}, #{description}, 1)
+    </insert>
+
+    <update id="updateByPrimaryKey">
+        update cms_student
+        set student_id = #{studentId},
+        <if test="studentPassword!=null and studentPassword!=''">
+            student_password = #{studentPassword},
+        </if>
+        portrait = #{avatar},
+        name = #{name},
+        gender = #{gender},
+        birthday = #{birthday},
+        phone = #{phone},
+        email = #{email},
+        wechat = #{wechat},
+        qq = #{qq},
+        update_date = #{updateDate},
+        update_by = #{updateBy},
+        description = #{description}
+        where id = #{id}
+    </update>
+
+    <!--    <delete id="deleteByPrimaryKey">-->
+    <!--        delete from cms_student where id in-->
+    <!--        <foreach collection="ids" open="(" close=")" separator="," item="id">-->
+    <!--            #{id}-->
+    <!--        </foreach>-->
+    <!--    </delete>-->
+
+    <!--使用标志位替换删除功能-->
+    <delete id="deleteByPrimaryKey">
+        update cms_student set `active` = 0,update_date = #{auditEntity.updateDate},update_by=#{auditEntity.updateBy}
+        where id in
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--修改标志位代表数据恢复-->
+    <delete id="restoreByPrimaryKey">
+        update cms_student set `active` = 1,update_date = #{auditEntity.updateDate},update_by=#{auditEntity.updateBy}
+        where id in
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

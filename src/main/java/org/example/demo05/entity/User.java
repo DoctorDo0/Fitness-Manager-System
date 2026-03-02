@@ -7,10 +7,11 @@ import org.example.demo05.utils.AuditEntity;
 import lombok.Getter;
 import lombok.Setter;
 
+// 后台用户信息，用于数据库的容器
 @TableName("t_security_user")
 @Getter
 @Setter
-public class User extends AuditEntity {
+public class User /*extends AuditEntity*/ {
     @TableId(type = IdType.AUTO)
     private Integer id;
     private String username;
