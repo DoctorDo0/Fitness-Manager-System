@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @TableName("cms_appointment")
 @Getter
@@ -24,8 +24,9 @@ public class Appointment {
     @NotNull(message = "课程信息ID不可为空")
     private Integer courseInfoId;
 
-    private String record;
-    private Date recordTime;
+    private Integer record;
+    private String recordInfo;
+    private LocalDate recordTime;
 
     private Student student;
     private CourseInfo courseInfo;

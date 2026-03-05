@@ -83,4 +83,28 @@ public class AppointmentController {
             throw new RuntimeException(e);
         }
     }
+
+    @PutMapping(path = "/late")
+    public JsonResp lateAppointment(@RequestBody Integer[] ids) {
+        if (ids != null && ids.length == 0) {
+            return JsonResp.error(400, "id为空");
+        }
+        try {
+            return appointmentService.lateAppointment(ids);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PutMapping(path = "/leave")
+    public JsonResp leaveAppointment(@RequestBody Integer[] ids) {
+        if (ids != null && ids.length == 0) {
+            return JsonResp.error(400, "id为空");
+        }
+        try {
+            return appointmentService.leaveAppointment(ids);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

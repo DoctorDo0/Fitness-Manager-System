@@ -18,4 +18,8 @@ public interface AppointmentService {
     JsonResp attendAppointment(Integer[] ids);
 
     JsonResp absentAppointment(Integer[] ids);
+
+    JsonResp lateAppointment(Integer[] ids);
+
+    JsonResp leaveAppointment(Integer[] ids);
 }

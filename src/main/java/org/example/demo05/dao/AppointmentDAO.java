@@ -13,9 +13,9 @@ public interface AppointmentDAO {
 
     int update(Appointment appointment);
 
-    int delete(Integer[] ids);
+    Appointment selectById(Integer id);
 
-    int attend(Integer[] ids);
+    int cancel(Integer[] ids);
 
-    int absent(Integer[] ids);
+    int attendStat(Integer[] ids, Integer status);
 }

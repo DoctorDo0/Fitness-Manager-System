@@ -163,26 +163,22 @@
         where id = #{id}
     </update>
 
-    <delete id="delete">
+    <select id="selectById" resultType="appointment">
+        select *
+        from cms_appiontment
+        where id = #{id}
+    </select>
+
+    <delete id="cancel">
         delete from cms_appiontment where id in
         <foreach collection="ids" open="(" close=")" separator="," item="id">
             #{id}
         </foreach>
     </delete>
 
-    <update id="attend">
+    <update id="attendStat">
         update cms_appiontment
-        set record = "已签到",
-        record_time = now()
-        where id in
-        <foreach collection="ids" open="(" close=")" separator="," item="id">
-            #{id}
-        </foreach>
-    </update>
-
-    <update id="absent">
-        update cms_appiontment
-        set record = "未签到",
+        set record = #{status},
         record_time = now()
         where id in
         <foreach collection="ids" open="(" close=")" separator="," item="id">

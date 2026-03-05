@@ -6,11 +6,15 @@ import com.github.pagehelper.PageInfo;
 import org.example.demo05.dao.AppointmentDAO;
 import org.example.demo05.entity.*;
 import org.example.demo05.service.AppointmentService;
+import org.example.demo05.utils.AttendanceStatus;
+import org.example.demo05.utils.CourseTime;
 import org.example.demo05.utils.JsonResp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -99,7 +103,13 @@ public class AppointmentServiceImplement implements AppointmentService {
             }
         });
         try (Page<?> _ = PageHelper.startPage(page.getPageNum(), page.getPageSize())) {
-            PageInfo<?> pageInfo = new PageInfo<>(appointmentDAO.selectAll(appointment));
+            List<Appointment> appointments = appointmentDAO.selectAll(appointment);
+            for (Appointment a : appointments) {
+                if (a.getRecord() != null) {
+                    a.setRecordInfo(AttendanceStatus.getDescFromCode(a.getRecord()));
+                }
+            }
+            PageInfo<?> pageInfo = new PageInfo<>(appointments);
             return JsonResp.success(pageInfo);
         }
     }
@@ -122,24 +132,95 @@ public class AppointmentServiceImplement implements AppointmentService {
         }
     }
 
+    // 取消预约(删除)
     @Override
     public JsonResp cancelAppointment(Integer[] ids) {
-        return JsonResp.success(appointmentDAO.delete(ids));
+        for (Integer id : ids) {
+            if (checkTimeBefore(id)) {
+                return JsonResp.error("已过开课时间，无法取消预约");
+            }
+        }
+        return JsonResp.success(appointmentDAO.cancel(ids));
     }
 
+    // 设置签到状态-签到
     @Override
     public JsonResp attendAppointment(Integer[] ids) {
-        return JsonResp.success(appointmentDAO.attend(ids));
+        for (Integer id : ids) {
+            if (!checkTimeBefore(id)) {
+                return JsonResp.error("有课程未到开课时间，无法签到");
+            }
+        }
+        return JsonResp.success(appointmentDAO.attendStat(ids, AttendanceStatus.ATTEND.getCode()));
     }
 
+    // 设置签到状态-旷课
     @Override
     public JsonResp absentAppointment(Integer[] ids) {
-        return JsonResp.success(appointmentDAO.absent(ids));
+        for (Integer id : ids) {
+            if (checkTimeAfter(id)) {
+                return JsonResp.error("课程未结束，无法设置旷课");
+            }
+        }
+        return JsonResp.success(appointmentDAO.attendStat(ids, AttendanceStatus.ABSENT.getCode()));
     }
 
-    //校验数据是否存在
+    // 设置签到状态-迟到
+    @Override
+    public JsonResp lateAppointment(Integer[] ids) {
+        for (Integer id : ids) {
+            if (!(checkTimeBefore(id) && checkTimeAfter(id))) {
+                return JsonResp.error("不在课程规定时间段内，无法设置迟到");
+            }
+        }
+        return JsonResp.success(appointmentDAO.attendStat(ids, AttendanceStatus.LATE.getCode()));
+    }
+
+    // 设置签到状态-请假
+    @Override
+    public JsonResp leaveAppointment(Integer[] ids) {
+        return JsonResp.success(appointmentDAO.attendStat(ids, AttendanceStatus.LEAVE.getCode()));
+    }
+
+    // 校验数据是否存在
     public Boolean checkout(Appointment appointment) {
         return studentServiceImplement.getByPrimaryKey(appointment.getStudentId()) != null
                 && courseInfoServiceImplement.getByPrimaryKey(appointment.getCourseInfoId()) != null;
+    }
+
+    // 校验时间是否未到
+    public Boolean checkTimeBefore(Integer id) {
+        //TimeFrom < now -> true
+        // 当前时间点
+        LocalDateTime currentLocalDateTime = LocalDateTime.now();
+        // 根据id获取appointment对象
+        Appointment appointment = appointmentDAO.selectById(id);
+        // 根据appointment对象中的courseInfoId获取courseInfo对象
+        CourseInfo courseInfo = courseInfoServiceImplement.getByPrimaryKey(appointment.getCourseInfoId());
+        // 通过courseInfo对象中的courseDate和coursePeriod合成新的时间点
+        LocalDateTime targetDateTimeFrom = LocalDateTime.of(
+                courseInfo.getCourseDate(),
+                CourseTime.getFromCoursePeriod(courseInfo.getCoursePeriod())
+        );
+        // 返回判断值
+        return targetDateTimeFrom.isBefore(currentLocalDateTime);
+    }
+
+    // 校验时间是否超过
+    public Boolean checkTimeAfter(Integer id) {
+        //TimeTo > now -> true
+        // 当前时间点
+        LocalDateTime currentLocalDateTime = LocalDateTime.now();
+        // 根据id获取appointment对象
+        Appointment appointment = appointmentDAO.selectById(id);
+        // 根据appointment对象中的courseInfoId获取courseInfo对象
+        CourseInfo courseInfo = courseInfoServiceImplement.getByPrimaryKey(appointment.getCourseInfoId());
+        // 通过courseInfo对象中的courseDate和coursePeriod合成新的时间点
+        LocalDateTime targetDateTimeTo = LocalDateTime.of(
+                courseInfo.getCourseDate(),
+                CourseTime.getToCoursePeriod(courseInfo.getCoursePeriod())
+        );
+        // 返回判断值
+        return targetDateTimeTo.isAfter(currentLocalDateTime);
     }
 }
