@@ -9,7 +9,7 @@ public enum CourseTime {
     Course1(1, LocalTime.of(8, 0), LocalTime.of(10, 0)),
     Course2(2, LocalTime.of(10, 0), LocalTime.of(12, 0)),
     Course3(3, LocalTime.of(14, 0), LocalTime.of(16, 0)),
-    Course4(4, LocalTime.of(18, 0), LocalTime.of(20, 0));
+    Course4(4, LocalTime.of(16, 0), LocalTime.of(18, 0));
 
     private final int coursePeriod;
     private final LocalTime timeFrom;
