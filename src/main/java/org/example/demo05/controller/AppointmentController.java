@@ -48,6 +48,24 @@ public class AppointmentController {
         }
     }
 
+    @DeleteMapping
+    public JsonResp deleteAppointment(@RequestBody Integer[] ids) {
+        try {
+            return appointmentService.deleteAppointment(ids);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PostMapping(path = "/book")
+    public JsonResp bookAppointment(@RequestBody Appointment appointment) {
+        try {
+            return appointmentService.bookAppointment(appointment);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @PutMapping(path = "/cancel")
     public JsonResp cancelAppointment(@RequestBody Integer[] ids) {
         if (ids != null && ids.length == 0) {

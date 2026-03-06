@@ -114,6 +114,7 @@ public class AppointmentServiceImplement implements AppointmentService {
         }
     }
 
+    // 强制新增
     @Override
     public JsonResp addAppointment(Appointment appointment) {
         if (!checkout(appointment)) {
@@ -132,11 +133,29 @@ public class AppointmentServiceImplement implements AppointmentService {
         }
     }
 
+    // 强制删除
+    @Override
+    public JsonResp deleteAppointment(Integer[] ids) {
+        return JsonResp.success(appointmentDAO.delete(ids));
+    }
+
+    // 预约(新增)
+    @Override
+    public JsonResp bookAppointment(Appointment appointment) {
+        if (!checkout(appointment)) {
+            return JsonResp.error("参数错误或不存在");
+        } else if (checkTimeBefore(appointment.getCourseInfoId())) {
+            return JsonResp.error("已过开课时间，无法预约");
+        } else {
+            return JsonResp.success(appointmentDAO.book(appointment));
+        }
+    }
+
     // 取消预约(删除)
     @Override
     public JsonResp cancelAppointment(Integer[] ids) {
         for (Integer id : ids) {
-            if (checkTimeBefore(id)) {
+            if (checkTimeBefore(getCourseInfoIdByAppointmentId(id))) {
                 return JsonResp.error("已过开课时间，无法取消预约");
             }
         }
@@ -147,7 +166,7 @@ public class AppointmentServiceImplement implements AppointmentService {
     @Override
     public JsonResp attendAppointment(Integer[] ids) {
         for (Integer id : ids) {
-            if (!checkTimeBefore(id)) {
+            if (!checkTimeBefore(getCourseInfoIdByAppointmentId(id))) {
                 return JsonResp.error("有课程未到开课时间，无法签到");
             }
         }
@@ -158,7 +177,7 @@ public class AppointmentServiceImplement implements AppointmentService {
     @Override
     public JsonResp absentAppointment(Integer[] ids) {
         for (Integer id : ids) {
-            if (checkTimeAfter(id)) {
+            if (checkTimeAfter(getCourseInfoIdByAppointmentId(id))) {
                 return JsonResp.error("课程未结束，无法设置旷课");
             }
         }
@@ -169,7 +188,7 @@ public class AppointmentServiceImplement implements AppointmentService {
     @Override
     public JsonResp lateAppointment(Integer[] ids) {
         for (Integer id : ids) {
-            if (!(checkTimeBefore(id) && checkTimeAfter(id))) {
+            if (!(checkTimeBefore(getCourseInfoIdByAppointmentId(id)) && checkTimeAfter(getCourseInfoIdByAppointmentId(id)))) {
                 return JsonResp.error("不在课程规定时间段内，无法设置迟到");
             }
         }
@@ -188,15 +207,21 @@ public class AppointmentServiceImplement implements AppointmentService {
                 && courseInfoServiceImplement.getByPrimaryKey(appointment.getCourseInfoId()) != null;
     }
 
+    // 根据appointmentId获取courseInfoId
+    public int getCourseInfoIdByAppointmentId(Integer appointmentId) {
+        // 根据id获取appointment对象
+        Appointment appointment = appointmentDAO.selectById(appointmentId);
+        // 返回appointment对象中的courseInfoId
+        return appointment.getCourseInfoId();
+    }
+
     // 校验时间是否未到
-    public Boolean checkTimeBefore(Integer id) {
+    public Boolean checkTimeBefore(Integer courseInfoId) {
         //TimeFrom < now -> true
         // 当前时间点
         LocalDateTime currentLocalDateTime = LocalDateTime.now();
-        // 根据id获取appointment对象
-        Appointment appointment = appointmentDAO.selectById(id);
-        // 根据appointment对象中的courseInfoId获取courseInfo对象
-        CourseInfo courseInfo = courseInfoServiceImplement.getByPrimaryKey(appointment.getCourseInfoId());
+        // 根据courseInfoId获取courseInfo对象
+        CourseInfo courseInfo = courseInfoServiceImplement.getByPrimaryKey(courseInfoId);
         // 通过courseInfo对象中的courseDate和coursePeriod合成新的时间点
         LocalDateTime targetDateTimeFrom = LocalDateTime.of(
                 courseInfo.getCourseDate(),

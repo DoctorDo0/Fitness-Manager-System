@@ -163,11 +163,23 @@
         where id = #{id}
     </update>
 
+    <delete id="delete">
+        delete from cms_appiontment where id in
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </delete>
+
     <select id="selectById" resultType="appointment">
         select *
         from cms_appiontment
         where id = #{id}
     </select>
+
+    <insert id="book" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into cms_appiontment (student_id, course_info_id)
+        values (#{studentId}, #{courseInfoId})
+    </insert>
 
     <delete id="cancel">
         delete from cms_appiontment where id in

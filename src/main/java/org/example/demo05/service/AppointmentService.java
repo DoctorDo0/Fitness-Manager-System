@@ -13,6 +13,10 @@ public interface AppointmentService {
 
     JsonResp updateAppointment(Appointment appointment);
 
+    JsonResp deleteAppointment(Integer[] ids);
+
+    JsonResp bookAppointment(Appointment appointment);
+
     JsonResp cancelAppointment(Integer[] ids);
 
     JsonResp attendAppointment(Integer[] ids);

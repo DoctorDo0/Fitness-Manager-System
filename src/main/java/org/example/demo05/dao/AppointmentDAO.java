@@ -13,7 +13,11 @@ public interface AppointmentDAO {
 
     int update(Appointment appointment);
 
+    int delete(Integer[] ids);
+
     Appointment selectById(Integer id);
+
+    int book(Appointment appointment);
 
     int cancel(Integer[] ids);
 
