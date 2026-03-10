@@ -5,6 +5,8 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.example.demo05.dao.AppointmentDAO;
 import org.example.demo05.entity.*;
+import org.example.demo05.entity.appointmentDTO.BookNumber;
+import org.example.demo05.entity.generalVO.CourseGroupCount;
 import org.example.demo05.service.AppointmentService;
 import org.example.demo05.utils.AttendanceStatus;
 import org.example.demo05.utils.CourseTime;
@@ -22,6 +24,7 @@ public class AppointmentServiceImplement implements AppointmentService {
     AppointmentDAO appointmentDAO;
     StudentServiceImplement studentServiceImplement;
     CourseInfoServiceImplement courseInfoServiceImplement;
+    CourseServiceImpl courseServiceImpl;
 
     @Autowired
     public void setAppointmentDAO(AppointmentDAO appointmentDAO) {
@@ -36,6 +39,11 @@ public class AppointmentServiceImplement implements AppointmentService {
     @Autowired
     public void setCourseInfoServiceImplement(CourseInfoServiceImplement courseInfoServiceImplement) {
         this.courseInfoServiceImplement = courseInfoServiceImplement;
+    }
+
+    @Autowired
+    public void setCourseServiceImpl(CourseServiceImpl courseServiceImpl) {
+        this.courseServiceImpl = courseServiceImpl;
     }
 
     @Override
@@ -105,9 +113,14 @@ public class AppointmentServiceImplement implements AppointmentService {
         try (Page<?> _ = PageHelper.startPage(page.getPageNum(), page.getPageSize())) {
             List<Appointment> appointments = appointmentDAO.selectAll(appointment);
             for (Appointment a : appointments) {
+                //通过枚举，根据签到状态位，设置为对应的签到状态值
                 if (a.getRecord() != null) {
                     a.setRecordInfo(AttendanceStatus.getDescFromCode(a.getRecord()));
                 }
+                //将当前选课人数与最大选课人数拼接在一起
+                Integer currentNumber = this.appointmentDAO.getBookNumber(a.getCourseInfoId()).getCount();
+                String numberInfo = currentNumber.toString() + "/" + a.getCourseInfo().getMaxNumber();
+                a.getCourseInfo().setCurrentNumberInfo(numberInfo);
             }
             PageInfo<?> pageInfo = new PageInfo<>(appointments);
             return JsonResp.success(pageInfo);
@@ -119,6 +132,10 @@ public class AppointmentServiceImplement implements AppointmentService {
     public JsonResp addAppointment(Appointment appointment) {
         if (!checkout(appointment)) {
             return JsonResp.error("参数错误或不存在");
+        } else if (checkHave(appointment)) {
+            return JsonResp.error("学生已经预约过该课程");
+        } else if (checkMax(appointment)) {
+            return JsonResp.error("预约课程人数已达上限");
         } else {
             return JsonResp.success(appointmentDAO.insert(appointment));
         }
@@ -146,6 +163,10 @@ public class AppointmentServiceImplement implements AppointmentService {
             return JsonResp.error("参数错误或不存在");
         } else if (checkTimeBefore(appointment.getCourseInfoId())) {
             return JsonResp.error("已过开课时间，无法预约");
+        } else if (checkHave(appointment)) {
+            return JsonResp.error("学生已经预约过该课程");
+        } else if (checkMax(appointment)) {
+            return JsonResp.error("预约课程人数已达上限");
         } else {
             return JsonResp.success(appointmentDAO.book(appointment));
         }
@@ -201,6 +222,46 @@ public class AppointmentServiceImplement implements AppointmentService {
         return JsonResp.success(appointmentDAO.attendStat(ids, AttendanceStatus.LEAVE.getCode()));
     }
 
+    // 设置签到备注
+    @Override
+    public JsonResp addAppointmentRecordDesc(Integer[] ids, String desc) {
+        for (Integer id : ids) {
+            if (appointmentDAO.selectById(id).getRecord() == null) {
+                return JsonResp.error("存在未设置签到状态的课程");
+            }
+        }
+        return JsonResp.success(appointmentDAO.attendDesc(ids, desc));
+    }
+
+    // 设置学生的课程得分
+    @Override
+    public JsonResp setScoreAndCredit(Integer[] ids, Double score) {
+        int count = 0;
+        for (Integer id : ids) {
+            if (appointmentDAO.selectById(id).getRecord() == null) {
+                return JsonResp.error("存在未设置签到状态的课程");
+            }
+        }
+        for (Integer id : ids) {
+            // 根据id获取courseInfo对象，获取courseId，获取其中的credits信息
+            int courseId = courseInfoServiceImplement.getByPrimaryKey(id).getCourseId();
+            // 根据courseId获取course对象，获取credit
+            Double credit = courseServiceImpl.getById(courseId).getCredits();
+            // 判定当前成绩是否>60，小于则无学分，>则按比值计算学分
+            double realCredit = score >= 60 ? (score / 100.0 * credit) : 0;
+            String formattedCredit = String.format("%.1f", realCredit);
+            count += appointmentDAO.setScoreAndCredit(id, score, Double.valueOf(formattedCredit));
+        }
+        return JsonResp.success(count);
+    }
+
+    @Override
+    public JsonResp getStudentCountWithSameCourse() {
+        List<CourseGroupCount> courseGroupCounts = appointmentDAO.getStudentCountWithSameCourse();
+        System.out.println(courseGroupCounts);
+        return JsonResp.success(courseGroupCounts);
+    }
+
     // 校验数据是否存在
     public Boolean checkout(Appointment appointment) {
         return studentServiceImplement.getByPrimaryKey(appointment.getStudentId()) != null
@@ -247,5 +308,26 @@ public class AppointmentServiceImplement implements AppointmentService {
         );
         // 返回判断值
         return targetDateTimeTo.isAfter(currentLocalDateTime);
+    }
+
+    // 校验是否已经预约过该课程
+    public Boolean checkHave(Appointment appointment) {
+        //已经有，return true
+        return this.appointmentDAO.getSameBook(appointment) >= 1;
+    }
+
+    // 校验预约课程人数是否已达上限
+    public Boolean checkMax(Appointment appointment) {
+        //已经上限，return true
+        int currentNumber = this.appointmentDAO.getBookNumber(appointment.getCourseInfoId()).getCount();
+        int maxNumber = this.courseInfoServiceImplement.getByPrimaryKey(appointment.getCourseInfoId()).getMaxNumber();
+        return currentNumber == maxNumber;
+    }
+
+    // 未使用
+    // 按照课程信息ID查询预约人数
+    public JsonResp getBookNumber(Integer courseInfoId) {
+        BookNumber bookNumber = appointmentDAO.getBookNumber(courseInfoId);
+        return JsonResp.success(bookNumber.getCount());
     }
 }

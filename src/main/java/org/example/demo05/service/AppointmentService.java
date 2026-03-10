@@ -26,4 +26,12 @@ public interface AppointmentService {
     JsonResp lateAppointment(Integer[] ids);
 
     JsonResp leaveAppointment(Integer[] ids);
+
+    JsonResp addAppointmentRecordDesc(Integer[] ids, String desc);
+
+    JsonResp setScoreAndCredit(Integer[] ids, Double score);
+
+    JsonResp getBookNumber(Integer courseInfoId);
+
+    JsonResp getStudentCountWithSameCourse();
 }

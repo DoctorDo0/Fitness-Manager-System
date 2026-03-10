@@ -35,4 +35,7 @@ public interface CourseService extends IService<Course> {
 
     //主要信息，适配前端下拉列表(选择器)
     List<Course> getMainInfo();
+
+    //课程数，适配前端EChart图表
+    int getCourseCount();
 }

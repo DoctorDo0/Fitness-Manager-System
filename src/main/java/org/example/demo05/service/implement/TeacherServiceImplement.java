@@ -94,4 +94,9 @@ public class TeacherServiceImplement implements TeacherService {
     private TeacherService self() {
         return (TeacherService) AopContext.currentProxy();
     }
+
+    @Override
+    public int getTeacherCount() {
+        return this.teacherDAO.getTeacherCount();
+    }
 }

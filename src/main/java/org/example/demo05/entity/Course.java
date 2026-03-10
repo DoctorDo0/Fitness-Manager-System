@@ -32,6 +32,8 @@ public class Course extends AuditEntity implements Serializable {
     @NotNull(message = "课程名称不可为空")
     private String courseName;
 
+    private Double credits;
+
     private String description;
 
     private Boolean active;

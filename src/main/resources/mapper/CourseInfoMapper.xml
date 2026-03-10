@@ -12,6 +12,7 @@
         <result column="info_course_date" property="courseDate"/>
         <result column="info_course_period" property="coursePeriod"/>
         <result column="info_course_address" property="courseAddress"/>
+        <result column="info_max_number" property="maxNumber"/>
 
         <!-- 关联课程对象，使用前缀 -->
         <association property="course"
@@ -20,6 +21,7 @@
             <id column="id" property="id"/>                      <!-- c_id → Course.id -->
             <result column="course_id" property="courseId"/>     <!-- c_course_id → Course.courseId -->
             <result column="course_name" property="courseName"/> <!-- c_name → Course.name -->
+            <result column="credits" property="credits"/>
             <result column="description" property="description"/><!-- c_description → Course.description -->
         </association>
 
@@ -42,10 +44,12 @@
         ci.course_date as info_course_date,
         ci.course_period as info_course_period,
         ci.course_address as info_course_address,
+        ci.max_number as info_max_number,
 
         c.id as c_id,
         c.course_id as c_course_id,
         c.course_name as c_course_name,
+        c.credits as c_credits,
         c.description as c_description,
 
         t.id as t_id,
@@ -130,6 +134,7 @@
                c.id              as c_id,
                c.course_id       as c_course_id,
                c.course_name     as c_course_name,
+               c.credits         as c_credit,
                c.description     as c_description,
 
                t.id              as t_id,
@@ -148,4 +153,10 @@
         limit 1;
     </select>
 
+    <select id="getTeacherCountWithSameCourse" resultType="courseGroupCount">
+        select count(0) as count, c.course_name as name
+        from cms_course_info as ci
+                 left join cms_course c on ci.course_id = c.id
+        group by c.id
+    </select>
 </mapper>

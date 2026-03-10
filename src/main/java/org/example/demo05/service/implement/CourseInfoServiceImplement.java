@@ -133,4 +133,9 @@ public class CourseInfoServiceImplement implements CourseInfoService {
     public List<CourseInfo> getMainInfo() {
         return this.courseInfoDAO.getMainInfo();
     }
+
+    @Override
+    public JsonResp getTeacherCountWithSameCourse() {
+        return JsonResp.success(courseInfoDAO.getTeacherCountWithSameCourse());
+    }
 }

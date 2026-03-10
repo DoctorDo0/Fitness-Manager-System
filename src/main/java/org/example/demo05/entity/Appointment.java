@@ -27,6 +27,10 @@ public class Appointment {
     private Integer record;
     private String recordInfo;
     private LocalDate recordTime;
+    private String recordDesc;
+
+    private double score;
+    private double credit;
 
     private Student student;
     private CourseInfo courseInfo;

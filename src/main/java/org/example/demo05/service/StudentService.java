@@ -24,4 +24,7 @@ public interface StudentService {
 
     //主要信息，适配前端下拉列表(选择器)
     List<Student> getMainInfo();
+
+    //学生数，适配前端EChart图表
+    int getStudentCount();
 }

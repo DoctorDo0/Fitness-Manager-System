@@ -23,7 +23,7 @@
 
     <!--不指定active内容时，查询active=1的数据，配合删除使用-->
     <select id="getCourses" resultType="CourseBean">
-        select id,course_id,course_name,description,register_date,register_by,update_date,update_by,active
+        select id,course_id,course_name,credits,description,register_date,register_by,update_date,update_by,active
         from cms_course
         <where>
             <if test="courseBean.id != null and courseBean.id !=''">
@@ -36,6 +36,9 @@
             <if test="courseBean.courseName != null and courseBean.courseName != ''">
                 <bind name="courseNameLike" value="'%'+courseBean.courseName+'%'"/>
                 and course_name like #{courseNameLike}
+            </if>
+            <if test="courseBean.credits != null and courseBean.credits != ''">
+                and credits = #{courseBean.credits}
             </if>
             <if test="courseBean.registerDateFrom != null">
                 and register_date &gt;= #{courseBean.registerDateFrom}
@@ -67,7 +70,12 @@
     </select>
 
     <select id="getMainInfo" resultType="course">
-        select id, course_id, course_name
+        select id, course_id, course_name, credits
+        from cms_course
+    </select>
+
+    <select id="getCourseCount" resultType="int">
+        select count(0)
         from cms_course
     </select>
 

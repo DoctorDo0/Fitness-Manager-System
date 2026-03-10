@@ -207,4 +207,10 @@ public class TeacherController {
     public JsonResp getMainInfo() {
         return JsonResp.success(this.teacherService.getMainInfo());
     }
+
+    //课程数，适配前端EChart图表用
+    @GetMapping(path = "/getCount")
+    public JsonResp getCount() {
+        return JsonResp.success(this.teacherService.getTeacherCount());
+    }
 }

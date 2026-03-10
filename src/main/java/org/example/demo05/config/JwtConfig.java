@@ -21,8 +21,8 @@ public class JwtConfig implements WebMvcConfigurer {
         registry.addInterceptor(jwtInterceptor)
                 .addPathPatterns("/api/**")
                 //不进行拦截的地址
-                .excludePathPatterns("/api/users/login",
-                        "/api/users/captcha",
+                .excludePathPatterns("/api/users/login", "/api/Student-users/login",
+                        "/api/users/captcha", "/api/Student-users/captcha",
                         "*.jpg", "*.png",
                         "*.gif", "*.css", "*.js");
     }

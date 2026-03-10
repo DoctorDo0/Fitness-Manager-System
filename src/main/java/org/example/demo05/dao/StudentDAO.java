@@ -26,4 +26,6 @@ public interface StudentDAO {
     Student selectByPrimaryKey(Integer id);
 
     List<Student> getMainInfo();
+
+    int getStudentCount();
 }

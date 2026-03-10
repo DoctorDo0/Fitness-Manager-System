@@ -41,6 +41,13 @@ public class CourseInfo {
     @NotBlank(message = "课程节数不可为空")
     private String courseAddress;
 
+    @NotNull(message = "课程可选最大人数不可为空")
+    @NotEmpty(message = "课程可选最大人数不可为空")
+    @NotBlank(message = "课程可选最大人数不可为空")
+    private Integer maxNumber;
+
+    private String currentNumberInfo;
+
     private Course course;
     private Teacher teacher;
 }

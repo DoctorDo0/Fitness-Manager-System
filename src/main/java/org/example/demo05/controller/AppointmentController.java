@@ -2,6 +2,8 @@ package org.example.demo05.controller;
 
 import com.github.pagehelper.Page;
 import org.example.demo05.entity.Appointment;
+import org.example.demo05.entity.appointmentDTO.Credit;
+import org.example.demo05.entity.appointmentDTO.RecordDesc;
 import org.example.demo05.service.AppointmentService;
 import org.example.demo05.utils.JsonResp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,5 +126,40 @@ public class AppointmentController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @PutMapping(path = "/recordDesc")
+    public JsonResp recordDesc(@RequestBody RecordDesc recordDesc) {
+        try {
+            return appointmentService.addAppointmentRecordDesc(recordDesc.getIds(), recordDesc.getDesc());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @PutMapping(path = "/credit")
+    public JsonResp setCredit(@RequestBody Credit credit) {
+        if (credit.getIds() == null || credit.getIds().length == 0 || credit.getScore() == null) {
+            return JsonResp.error(400, "id或score输入值为空");
+        }
+        try {
+            return appointmentService.setScoreAndCredit(credit.getIds(), credit.getScore());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @GetMapping(path = "/getBookNumber")
+    public JsonResp getBookNumber(@RequestParam Integer courseInfoId) {
+        if (courseInfoId == null) {
+            return JsonResp.error("课程信息ID不可为空");
+        }
+        return appointmentService.getBookNumber(courseInfoId);
+    }
+
+    //课程分组占比(学生数量)，适配前端EChart图表用
+    @GetMapping(path = "/getCourseGroup")
+    public JsonResp getCourseGroup() {
+        return this.appointmentService.getStudentCountWithSameCourse();
     }
 }

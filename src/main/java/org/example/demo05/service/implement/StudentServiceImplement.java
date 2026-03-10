@@ -94,4 +94,9 @@ public class StudentServiceImplement implements StudentService {
     private StudentService self() {
         return (StudentService) AopContext.currentProxy();
     }
+
+    @Override
+    public int getStudentCount() {
+        return this.studentDAO.getStudentCount();
+    }
 }

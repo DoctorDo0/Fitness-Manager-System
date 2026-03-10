@@ -64,4 +64,10 @@ public class CourseInfoController {
     public JsonResp getMainInfo() {
         return JsonResp.success(this.courseInfoService.getMainInfo());
     }
+
+    //课程分组占比(教师数量)，适配前端EChart图表用
+    @GetMapping(path = "/getCourseGroup")
+    public JsonResp getCourseGroup() {
+        return this.courseInfoService.getTeacherCountWithSameCourse();
+    }
 }

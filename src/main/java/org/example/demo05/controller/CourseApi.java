@@ -96,4 +96,10 @@ public class CourseApi {
     public JsonResp getMainInfo() {
         return JsonResp.success(this.courseService.getMainInfo());
     }
+
+    //课程数，适配前端EChart图表用
+    @GetMapping(path = "/getCount")
+    public JsonResp getCount() {
+        return JsonResp.success(this.courseService.getCourseCount());
+    }
 }

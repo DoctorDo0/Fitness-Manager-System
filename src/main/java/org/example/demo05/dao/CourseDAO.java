@@ -21,4 +21,6 @@ public interface CourseDAO extends BaseMapper<Course> {
     IPage<Course> getCourses(Page<?> page, @Param("courseBean") CourseBean courseBean);
 
     List<Course> getMainInfo();
+
+    int getCourseCount();
 }

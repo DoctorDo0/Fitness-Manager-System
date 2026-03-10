@@ -187,4 +187,9 @@
         from cms_student
     </select>
 
+    <select id="getStudentCount" resultType="int">
+        select count(0)
+        from cms_student
+    </select>
+
 </mapper>

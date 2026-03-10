@@ -11,6 +11,9 @@
         <result column="appointment_course_info_id" property="courseInfoId"/>
         <result column="appointment_record" property="record"/>
         <result column="appointment_record_time" property="recordTime"/>
+        <result column="appointment_record_desc" property="recordDesc"/>
+        <result column="appointment_score" property="score"/>
+        <result column="appointment_credit" property="credit"/>
         <!-- 关联学生对象，使用前缀 -->
         <association property="student"
                      javaType="org.example.demo05.entity.Student"
@@ -30,6 +33,7 @@
             <result column="course_date" property="courseDate"/>
             <result column="course_period" property="coursePeriod"/>
             <result column="course_address" property="courseAddress"/>
+            <result column="max_number" property="maxNumber"/>
 
             <!-- 关联课程对象，使用前缀 -->
             <association property="course"
@@ -38,6 +42,7 @@
                 <id column="id" property="id"/>                      <!-- c_id → Course.id -->
                 <result column="course_id" property="courseId"/>     <!-- c_course_id → Course.courseId -->
                 <result column="course_name" property="courseName"/> <!-- c_name → Course.name -->
+                <result column="credits" property="credits"/>
                 <result column="description" property="description"/><!-- c_description → Course.description -->
             </association>
 
@@ -60,6 +65,9 @@
         ap.course_info_id as appointment_course_info_id,
         ap.record as appointment_record,
         ap.record_time as appointment_record_time,
+        ap.record_desc as appointment_record_desc,
+        ap.score as appointment_score,
+        ap.credit as appointment_credit,
 
         s.id as stu_id,
         s.student_id as stu_student_id,
@@ -72,16 +80,18 @@
         ci.course_date as info_course_date,
         ci.course_period as info_course_period,
         ci.course_address as info_course_address,
+        ci.max_number as info_max_number,
 
         c.id as info_c_id,
         c.course_id as info_c_course_id,
-        c.course_name AS info_c_course_name,
-        c.description AS info_c_description,
+        c.course_name as info_c_course_name,
+        c.credits as info_c_credits,
+        c.description as info_c_description,
 
-        t.id AS info_t_id,
-        t.teacher_id AS info_t_teacher_id,
-        t.name AS info_t_name,
-        t.gender AS info_t_gender
+        t.id as info_t_id,
+        t.teacher_id as info_t_teacher_id,
+        t.name as info_t_name,
+        t.gender as info_t_gender
 
         from cms_appiontment ap
         left join cms_student s on ap.student_id = s.id
@@ -197,4 +207,41 @@
             #{id}
         </foreach>
     </update>
+
+    <update id="attendDesc">
+        update cms_appiontment
+        set record_desc = #{desc}
+        where id in
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="setScoreAndCredit">
+        update cms_appiontment
+        set score  = #{score},
+            credit = #{credit}
+        where id = #{id}
+    </update>
+
+    <select id="getBookNumber" resultType="bookNumber">
+        select course_info_id, count(0) as count
+        from cms_appiontment
+        where course_info_id = #{courseInfoId}
+    </select>
+
+    <select id="getSameBook" resultType="int">
+        select count(0)
+        from cms_appiontment
+        where course_info_id = #{courseInfoId} and student_id = #{studentId}
+        limit 1
+    </select>
+
+    <select id="getStudentCountWithSameCourse" resultType="courseGroupCount">
+        select count(0) as count, c.course_name as name
+        from cms_appiontment as ap
+                 left join cms_course_info ci on ap.course_info_id = ci.id
+                 left join cms_course c on ci.course_id = c.id
+        group by c.id
+    </select>
 </mapper>

@@ -78,4 +78,9 @@ public class CourseServiceImpl extends ServiceImpl<CourseDAO, Course> implements
     public List<Course> getMainInfo() {
         return this.courseDAO.getMainInfo();
     }
+
+    @Override
+    public int getCourseCount() {
+        return this.courseDAO.getCourseCount();
+    }
 }

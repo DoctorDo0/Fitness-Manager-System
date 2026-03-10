@@ -26,4 +26,6 @@ public interface TeacherDAO {
     Teacher selectByPrimaryKey(Integer id);
 
     List<Teacher> getMainInfo();
+
+    int getTeacherCount();
 }

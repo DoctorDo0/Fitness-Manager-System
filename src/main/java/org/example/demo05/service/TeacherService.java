@@ -24,4 +24,7 @@ public interface TeacherService {
 
     //主要信息，适配前端下拉列表(选择器)
     List<Teacher> getMainInfo();
+
+    //教师数，适配前端EChart图表
+    int getTeacherCount();
 }
